@@ -26,58 +26,6 @@ describe Article do
     assert_equal [:body, :extended], a.content_fields
   end
 
-  describe "merge_with" do
-    describe "with invalid duplicate id" do
-      it "should search the duplicate id" do
-        a = Article.new
-        Article.should_receive(:where).with(hash_including :id => "-1").and_return([])
-        a.merge_with("-1")
-      end
-      it "should return nil" do
-        a = Article.new
-        Article.should_receive(:where).and_return([])
-        a.merge_with("-1").should be_nil
-      end
-    end
-
-    describe "with valid duplicate id" do
-      before do
-        @a = Article.new({:body => "body 1"})
-        @a.stub(:save).and_return(true)
-        @a.stub(:body_and_extended).and_return(@a.body)
-        @duplicated = mock('article', :body => "body 2", :delete => true)
-      end
-
-      it "should search the duplicate id" do
-        Article.should_receive(:where).with(hash_including :id => "2").and_return([@duplicated])
-        @a.merge_with("2")
-      end
-      it "should get the duplicate id article" do
-        Article.should_receive(:where).and_return([@duplicated])
-        @a.merge_with("2")
-      end
-      it "should merge the texts" do
-        Article.should_receive(:where).and_return([@duplicated])
-        @a.merge_with("2")
-        @a.body.should == "body 1body 2"
-      end
-      it "should update the article" do
-        Article.should_receive(:where).and_return([@duplicated])
-        @a.should_receive(:save)
-        @a.merge_with("2")
-      end
-      it "should delete the duplicated article" do
-        Article.should_receive(:where).and_return([@duplicated])
-        @duplicated.should_receive(:delete)
-        @a.merge_with("2")
-      end
-      it "should return true" do
-        Article.should_receive(:where).and_return([@duplicated])
-        @a.merge_with("2").should == true
-      end
-    end
-  end
-
   describe "#permalink_url" do
     describe "with hostname" do
       subject { Article.new(:permalink => 'article-3', :published_at => Time.new(2004, 6, 1)).permalink_url(anchor=nil, only_path=false) }

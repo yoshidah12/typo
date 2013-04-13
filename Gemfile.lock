@@ -78,8 +78,6 @@ GEM
     kaminari (0.14.1)
       actionpack (>= 3.0.0)
       activesupport (>= 3.0.0)
-    launchy (2.1.2)
-      addressable (~> 2.3)
     libwebsocket (0.1.5)
       addressable
     linecache19 (0.5.12)
@@ -193,7 +191,6 @@ DEPENDENCIES
   htmlentities
   json
   kaminari
-  launchy
   mini_magick (~> 1.3.3)
   pg
   rails (~> 3.0.10)
@@ -204,6 +201,11 @@ DEPENDENCIES
   ruby-debug19
   rubypants (~> 0.2.0)
   simplecov
+  sqlite3
+  thin
+  uuidtools (~> 2.1.1)
+  webrat
+mplecov
   sqlite3
   thin
   uuidtools (~> 2.1.1)

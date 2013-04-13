@@ -607,50 +607,6 @@ describe Admin::ContentController do
       end
     end
 
-    describe 'merge action' do
-      describe 'with invalid duplicate article id' do
-        before do 
-          @article.stub(:merge_with).and_return(nil)
-          Article.should_receive(:find).with(@article.id).and_return(@article)
-        end
-
-        it 'should try to merge with duplicate article id' do
-          post :merge, {:id => @article.id, :merge_with => "-1" }
-        end
-
-        it 'should show same page' do
-          post :merge, {:id => @article.id, :merge_with => "-1" }
-          response.should redirect_to(:controller => 'content', :action => 'index')
-        end
-
-        it 'should show the error' do
-          post :merge, {:id => @article.id, :merge_with => "-1" }
-          flash[:error].should == "Error, merge with id not found"
-        end
-      end
-
-      describe 'with valid duplicate article id' do
-        before do
-          @article.stub(:merge_with).and_return(@article)
-          Article.should_receive(:find).with(@article.id).and_return(@article)
-        end
-
-        it 'should merge the articles' do
-          post :merge, {:id => @article.id, :merge_with => "2" }
-        end
-
-        it 'should show same page' do
-          post :merge, {:id => @article.id, :merge_with => "-1" }
-          response.should redirect_to(:controller => 'content', :action => 'index')
-        end
-
-        it 'should show the notice' do
-          post :merge, {:id => @article.id, :merge_with => "-1" }
-          flash[:notice].should == "Articles merged"
-        end
-      end
-    end
-
   end
 
   describe 'with publisher connection' do

@@ -208,10 +208,6 @@ class Article < Content
     blog.url_for(:controller => "/admin/content", :action =>"edit", :id => id)
   end
 
-  def merge_url
-    blog.url_for(:controller => "/admin/content", :action =>"merge", :id => id)
-  end
-
   def delete_url
     blog.url_for(:controller => "/admin/content", :action =>"destroy", :id => id)
   end
@@ -420,22 +416,20 @@ class Article < Content
     user.admin? || user_id == user.id
   end
 
-  def merge_with(id)
-    duplicated = Article.where(:id => id).first
-
-    if duplicated.nil?
-      return
+  def merge_with(other_article_id)
+    tomerge = Article.find_by_id(other_article_id)
+    if not self.id or not tomerge.id
+      return false
     end
- 
-    self.body_and_extended = self.body_and_extended + duplicated.body_and_extended
 
-    self.comments << duplicated.comments
+    self.body = self.body + "\n\n" + tomerge.body
+    self.comments << tomerge.comments
+    self.save!
 
-    return unless self.save
+    tomerge = Article.find_by_id(other_article_id)
+    tomerge.destroy
 
-    duplicated.delete
-
-    self
+    return true
   end
 
   protected
@@ -488,5 +482,4 @@ class Article < Content
     to = to - 1 # pull off 1 second so we don't overlap onto the next day
     return from..to
   end
-
 end
