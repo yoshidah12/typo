@@ -205,8 +205,3 @@ DEPENDENCIES
   thin
   uuidtools (~> 2.1.1)
   webrat
-mplecov
-  sqlite3
-  thin
-  uuidtools (~> 2.1.1)
-  webrat
